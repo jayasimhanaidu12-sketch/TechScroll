@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#08090c" />
+    <meta name="description" content="TechScroll AI turns the way you scroll into a map of what to learn next." />
+    <title>TechScroll AI — Your feed, understood</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#/" aria-label="TechScroll AI home">
+          <span class="brand-mark"><span></span><span></span><span></span></span>
+          <span>techscroll <i>ai</i></span>
+        </a>
+        <nav class="main-nav" aria-label="Main navigation">
+          <a href="#/dashboard" data-nav="dashboard">Dashboard</a>
+          <a href="#/recommendation" data-nav="recommendation">Recommendation</a>
+          <a href="#/explain" data-nav="explain">Explainability</a>
+          <a href="#/demo" data-nav="demo">Trap scenario <span class="nav-dot"></span></a>
+        </nav>
+        <div class="topbar-actions">
+          <span class="api-status" id="api-status"><span></span> demo mode</span>
+          <button class="avatar" aria-label="Alex Morgan profile">AM</button>
+        </div>
+      </header>
+      <main id="app" class="page-wrap" aria-live="polite"></main>
+      <footer class="footer">
+        <span>TECHSCROLL AI / SEMANTIC CONTENT OS</span>
+        <span>Built for the next thing you want to learn <i>↗</i></span>
+      </footer>
+    </div>
+    <div id="toast" class="toast" role="status"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
