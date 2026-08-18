@@ -28,6 +28,18 @@ SEED_REELS = [
     Reel("reel-06", "Reading a Dashboard Like an Engineer", "Data With Dan", "Data & Analytics", "Beginner", "04:36", "Turn metrics into better engineering decisions with three simple questions.", ("dashboard", "metrics", "analytics"), .77, .26, "cyan"),
     Reel("reel-07", "Threat Modeling Your First API", "Sana Ali", "Cybersecurity", "Intermediate", "07:31", "A practical threat-modeling walkthrough for builders shipping their first API.", ("security", "api", "privacy"), .75, .21, "red"),
     Reel("reel-08", "The Laptop Setup That Survives a Launch", "Build Mode", "Software Engineering", "Beginner", "03:58", "Small workflow changes that keep your focus intact on a long build day.", ("laptop", "developer", "workflow"), .72, .32, "lime"),
+    Reel("reel-09", "What Actually Happens When You Type a URL", "Packet Walk", "Networking", "Beginner", "05:44", "Follow a browser request from DNS lookup to the server response in plain language.", ("dns", "http", "web", "networking"), .86, .24, "cyan"),
+    Reel("reel-10", "Docker in 60 Seconds: Images, Containers, Ports", "Ship It", "DevOps & Cloud", "Beginner", "04:12", "The mental model you need before running your first service in a container.", ("docker", "containers", "devops", "cloud"), .89, .29, "blue"),
+    Reel("reel-11", "Build a RAG App Without the Buzzwords", "Nora Chen", "AI & Machine Learning", "Intermediate", "10:18", "Embeddings, retrieval, and generation explained through one useful product flow.", ("rag", "embeddings", "llm", "python"), .90, .46, "violet"),
+    Reel("reel-12", "Git Branches Without the Confusion", "Commit Club", "Software Engineering", "Beginner", "03:27", "A visual walkthrough of branches, merges, and the safest way to collaborate.", ("git", "github", "collaboration", "developer"), .82, .18, "mint"),
+    Reel("reel-13", "SQL Joins Explained with One Coffee Shop", "Data With Dan", "Data & Analytics", "Beginner", "06:06", "Understand inner, left, and full joins using a story you will remember.", ("sql", "database", "data", "analytics"), .87, .20, "amber"),
+    Reel("reel-14", "React State: The Part Beginners Miss", "Frontend Fieldnotes", "Frontend Engineering", "Intermediate", "08:11", "Learn how state flows through a component tree and why renders happen.", ("react", "javascript", "frontend", "state"), .84, .37, "pink"),
+    Reel("reel-15", "How Public-Key Cryptography Works", "Secure By Design", "Cybersecurity", "Intermediate", "07:02", "The lock-and-key idea behind HTTPS, signatures, and secure communication.", ("cryptography", "https", "security", "encryption"), .81, .22, "red"),
+    Reel("reel-16", "The 5-Minute System Design Interview", "Mina Patel", "Software Engineering", "Advanced", "09:40", "A repeatable way to break down scale, storage, traffic, and trade-offs.", ("system design", "architecture", "scale", "interview"), .88, .33, "lime"),
+    Reel("reel-17", "Edge Computing: Why the Server Moved Closer", "Cloud Atlas", "DevOps & Cloud", "Intermediate", "05:51", "See how latency, caching, and distributed systems shape modern apps.", ("edge", "cloud", "latency", "distributed"), .78, .27, "blue"),
+    Reel("reel-18", "Computer Vision Is More Than Image Labels", "Model Room", "AI & Machine Learning", "Advanced", "08:35", "A friendly tour from pixels to detection, segmentation, and visual reasoning.", ("computer vision", "python", "deep learning", "models"), .80, .39, "violet"),
+    Reel("reel-19", "Design Tokens: The Secret Behind Consistent UIs", "Lena Okafor", "Product Design", "Intermediate", "06:28", "Turn color, type, and spacing decisions into a system developers can ship.", ("design systems", "tokens", "figma", "ui"), .76, .25, "amber"),
+    Reel("reel-20", "The Internet of Things, Without the Hype", "Signal Lab", "Emerging Tech", "Intermediate", "07:48", "Sensors, protocols, and the real engineering constraints behind connected devices.", ("iot", "sensors", "hardware", "embedded"), .73, .31, "cyan"),
 ]
 
 
@@ -110,6 +122,17 @@ def dashboard(student_id: str = "alex") -> dict:
     profile = get_profile(student_id)
     watched = [dict(row) for row in connection.execute("SELECT * FROM interactions WHERE student_id=? ORDER BY id DESC", (student_id,)).fetchall()]
     return {"student": dict(student), "profile": profile, "watched": watched}
+
+
+@app.get("/api/reels")
+def reels(limit: int = 20) -> dict:
+    """Return the technology reel catalog for the feed/library surface."""
+    init_db()
+    safe_limit = min(max(limit, 1), 20)
+    connection = connect()
+    rows = connection.execute("SELECT * FROM reels ORDER BY id LIMIT ?", (safe_limit,)).fetchall()
+    connection.close()
+    return {"reels": [{**dict(row), "tags": json.loads(row["tags"])} for row in rows], "count": len(rows)}
 
 
 @app.post("/api/analyze")

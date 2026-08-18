@@ -24,6 +24,29 @@ const state = {
     { id: 'reel-07', title: 'Threat Modeling Your First API', creator: 'Sana Ali', category: 'Cybersecurity', difficulty: 'Intermediate', duration: '07:31', score: 6.92, color: 'red' },
     { id: 'reel-04', title: 'How I Think About ML Systems', creator: 'Nora Chen', category: 'AI & Machine Learning', difficulty: 'Advanced', duration: '09:04', score: 6.71, color: 'violet' },
   ],
+  library: [
+    { id: 'reel-01', title: 'Building a Real-Time Event Pipeline with Kafka', creator: 'Mina Patel', category: 'Software Engineering', difficulty: 'Advanced', duration: '08:42', color: 'mint', tags: ['java', 'backend', 'kafka'] },
+    { id: 'reel-02', title: '10 AI Tools Every Developer Needs', creator: 'The Stack Daily', category: 'AI & Machine Learning', difficulty: 'Beginner', duration: '05:18', color: 'pink', tags: ['ai tools', 'developer'] },
+    { id: 'reel-03', title: "Spring Boot APIs That Don't Break at Scale", creator: 'Arjun Rao', category: 'Software Engineering', difficulty: 'Intermediate', duration: '11:26', color: 'blue', tags: ['java', 'spring boot', 'api'] },
+    { id: 'reel-04', title: 'How I Think About ML Systems', creator: 'Nora Chen', category: 'AI & Machine Learning', difficulty: 'Advanced', duration: '09:04', color: 'violet', tags: ['python', 'machine learning'] },
+    { id: 'reel-05', title: "A Designer's Guide to Developer Tools", creator: 'Lena Okafor', category: 'Product Design', difficulty: 'Intermediate', duration: '06:52', color: 'amber', tags: ['figma', 'product'] },
+    { id: 'reel-06', title: 'Reading a Dashboard Like an Engineer', creator: 'Data With Dan', category: 'Data & Analytics', difficulty: 'Beginner', duration: '04:36', color: 'cyan', tags: ['dashboard', 'metrics'] },
+    { id: 'reel-07', title: 'Threat Modeling Your First API', creator: 'Sana Ali', category: 'Cybersecurity', difficulty: 'Intermediate', duration: '07:31', color: 'red', tags: ['security', 'api'] },
+    { id: 'reel-08', title: 'The Laptop Setup That Survives a Launch', creator: 'Build Mode', category: 'Software Engineering', difficulty: 'Beginner', duration: '03:58', color: 'lime', tags: ['laptop', 'workflow'] },
+    { id: 'reel-09', title: 'What Actually Happens When You Type a URL', creator: 'Packet Walk', category: 'Networking', difficulty: 'Beginner', duration: '05:44', color: 'cyan', tags: ['dns', 'http', 'web'] },
+    { id: 'reel-10', title: 'Docker in 60 Seconds: Images, Containers, Ports', creator: 'Ship It', category: 'DevOps & Cloud', difficulty: 'Beginner', duration: '04:12', color: 'blue', tags: ['docker', 'containers', 'cloud'] },
+    { id: 'reel-11', title: 'Build a RAG App Without the Buzzwords', creator: 'Nora Chen', category: 'AI & Machine Learning', difficulty: 'Intermediate', duration: '10:18', color: 'violet', tags: ['rag', 'embeddings', 'llm'] },
+    { id: 'reel-12', title: 'Git Branches Without the Confusion', creator: 'Commit Club', category: 'Software Engineering', difficulty: 'Beginner', duration: '03:27', color: 'mint', tags: ['git', 'github', 'collaboration'] },
+    { id: 'reel-13', title: 'SQL Joins Explained with One Coffee Shop', creator: 'Data With Dan', category: 'Data & Analytics', difficulty: 'Beginner', duration: '06:06', color: 'amber', tags: ['sql', 'database', 'data'] },
+    { id: 'reel-14', title: 'React State: The Part Beginners Miss', creator: 'Frontend Fieldnotes', category: 'Frontend Engineering', difficulty: 'Intermediate', duration: '08:11', color: 'pink', tags: ['react', 'javascript', 'frontend'] },
+    { id: 'reel-15', title: 'How Public-Key Cryptography Works', creator: 'Secure By Design', category: 'Cybersecurity', difficulty: 'Intermediate', duration: '07:02', color: 'red', tags: ['cryptography', 'https', 'encryption'] },
+    { id: 'reel-16', title: 'The 5-Minute System Design Interview', creator: 'Mina Patel', category: 'Software Engineering', difficulty: 'Advanced', duration: '09:40', color: 'lime', tags: ['system design', 'architecture', 'scale'] },
+    { id: 'reel-17', title: 'Edge Computing: Why the Server Moved Closer', creator: 'Cloud Atlas', category: 'DevOps & Cloud', difficulty: 'Intermediate', duration: '05:51', color: 'blue', tags: ['edge', 'cloud', 'latency'] },
+    { id: 'reel-18', title: 'Computer Vision Is More Than Image Labels', creator: 'Model Room', category: 'AI & Machine Learning', difficulty: 'Advanced', duration: '08:35', color: 'violet', tags: ['computer vision', 'python'] },
+    { id: 'reel-19', title: 'Design Tokens: The Secret Behind Consistent UIs', creator: 'Lena Okafor', category: 'Product Design', difficulty: 'Intermediate', duration: '06:28', color: 'amber', tags: ['design systems', 'tokens', 'figma'] },
+    { id: 'reel-20', title: 'The Internet of Things, Without the Hype', creator: 'Signal Lab', category: 'Emerging Tech', difficulty: 'Intermediate', duration: '07:48', color: 'cyan', tags: ['iot', 'sensors', 'hardware'] },
+  ],
+  reelFilter: 'All topics',
   apiOnline: false,
   trapMode: 'semantic',
   feedback: null,
@@ -115,11 +138,17 @@ function renderDashboard() {
 
 function formulaRow(label, value, negative = false) { return `<div class="formula-row"><span>${label}</span><div class="formula-meter"><span class="${negative ? 'negative' : ''}" style="width:${Math.min(100, Math.max(4, Number(value) * 100))}%"></span></div><strong>${negative ? '−' : '+'}${Number(value).toFixed(2)}</strong></div>`; }
 
+function renderReelLibrary() {
+  const topics = ['All topics', ...new Set(state.library.map((item) => item.category))];
+  const filtered = state.reelFilter === 'All topics' ? state.library : state.library.filter((item) => item.category === state.reelFilter);
+  return `<section class="reel-library"><div class="library-heading"><div><p class="eyebrow">Technology reel library / ${state.library.length} reels</p><h2>Keep the signal moving.</h2><p>Short, useful explainers across the stack — from browser requests to system design.</p></div><span class="library-count">${filtered.length.toString().padStart(2, '0')} <small>shown</small></span></div><div class="library-filters">${topics.map((topic) => `<button class="library-filter ${topic === state.reelFilter ? 'active' : ''}" data-reel-filter="${escapeHtml(topic)}">${escapeHtml(topic)}</button>`).join('')}</div><div class="reel-library-grid">${filtered.map((item, index) => `<a class="library-card" href="#/explain"><div class="library-card-top"><span class="library-index">${String(index + 1).padStart(2, '0')}</span>${reelPoster(item)}<span class="library-duration">${item.duration}</span></div><div class="library-card-copy"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.creator)} · ${escapeHtml(item.difficulty)}</p><div>${(item.tags || []).slice(0, 3).map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('')}</div></div></a>`).join('')}</div></section>`;
+}
+
 function renderRecommendation() {
   const reel = state.recommendation;
   return `<section class="recommendation-page page-enter">${shellHeader('Recommendation / 01', 'The right next thing.', 'A recommendation that respects where you are, then gives you somewhere better to go.')}
     <div class="recommendation-feature"><div class="featured-video">${reelPoster(reel, true)}<div class="video-overlay"><span>RECOMMENDED REEL</span><strong>${reel.duration}</strong></div></div><div class="recommendation-copy"><div class="recommendation-kicker"><span class="match-badge">${Math.round(reel.score * 10)}% match</span><span class="muted">ranked just now</span></div><h2>${escapeHtml(reel.title)}</h2><p class="creator">with <strong>${escapeHtml(reel.creator)}</strong> <span class="verified">✓</span></p><p class="rec-description">${escapeHtml(reel.description)}</p><div class="tag-list">${reel.tags.map((tag) => `<span>#${escapeHtml(tag)}</span>`).join('')}</div><div class="why-box"><span class="why-icon">${icon('spark', 17)}</span><div><span class="mini-label">WHY THIS, WHY NOW</span><p>${escapeHtml(reel.reason)}</p></div></div><div class="feedback-row"><span>Does this feel right?</span><button class="feedback-button ${state.feedback === 'up' ? 'selected' : ''}" data-feedback="up" data-reel="${reel.id}">${icon('thumb', 17)} Yes</button><button class="feedback-button ${state.feedback === 'down' ? 'selected down' : ''}" data-feedback="down" data-reel="${reel.id}">${icon('thumb', 17)} Not quite</button><button class="save-button ${state.feedback === 'save' ? 'selected' : ''}" data-feedback="save" data-reel="${reel.id}">${icon('save', 17)}</button></div></div></div>
-    <div class="recommendation-bottom"><div class="panel formula-panel"><div class="panel-heading"><div><p class="eyebrow">The scoring layer</p><h3>Why it ranked #1</h3></div><span class="score-number">${reel.score}<small>/ 10</small></span></div><p class="panel-intro">Every recommendation balances relevance with usefulness. Hype is a penalty, not a shortcut.</p>${formulaRow('Interest match', reel.formula.interest)}${formulaRow('Career adjacency', reel.formula.career)}${formulaRow('Engagement quality', reel.formula.engagement)}${formulaRow('Difficulty fit', reel.formula.difficulty)}${formulaRow('Hype penalty', reel.formula.hype_penalty, true)}<div class="formula-equation">Interest + Career + Engagement + Diversity + Difficulty <span>− Hype</span></div></div><div class="panel alternatives-panel"><div class="panel-heading"><div><p class="eyebrow">The short list</p><h3>Also worth your time</h3></div><span class="panel-icon">${icon('layers', 18)}</span></div><div class="alternative-list">${state.alternatives.map((item, i) => `<a class="alternative" href="#/explain"><span class="alt-index">0${i + 2}</span>${reelPoster(item)}<span class="alt-copy"><strong>${escapeHtml(item.title)}</strong><small>${item.category} · ${item.duration}</small></span><span class="alt-score">${item.score}</span></a>`).join('')}</div></div></div>
+    <div class="recommendation-bottom"><div class="panel formula-panel"><div class="panel-heading"><div><p class="eyebrow">The scoring layer</p><h3>Why it ranked #1</h3></div><span class="score-number">${reel.score}<small>/ 10</small></span></div><p class="panel-intro">Every recommendation balances relevance with usefulness. Hype is a penalty, not a shortcut.</p>${formulaRow('Interest match', reel.formula.interest)}${formulaRow('Career adjacency', reel.formula.career)}${formulaRow('Engagement quality', reel.formula.engagement)}${formulaRow('Difficulty fit', reel.formula.difficulty)}${formulaRow('Hype penalty', reel.formula.hype_penalty, true)}<div class="formula-equation">Interest + Career + Engagement + Diversity + Difficulty <span>− Hype</span></div></div><div class="panel alternatives-panel"><div class="panel-heading"><div><p class="eyebrow">The short list</p><h3>Also worth your time</h3></div><span class="panel-icon">${icon('layers', 18)}</span></div><div class="alternative-list">${state.alternatives.map((item, i) => `<a class="alternative" href="#/explain"><span class="alt-index">0${i + 2}</span>${reelPoster(item)}<span class="alt-copy"><strong>${escapeHtml(item.title)}</strong><small>${item.category} · ${item.duration}</small></span><span class="alt-score">${item.score}</span></a>`).join('')}</div></div></div>${renderReelLibrary()}
   </section>`;
 }
 
@@ -151,9 +180,10 @@ function render() {
 
 async function loadLiveData() {
   try {
-    const [health, dashboard] = await Promise.all([api('/health'), api('/dashboard?student_id=alex')]);
+    const [health, dashboard, catalog] = await Promise.all([api('/health'), api('/dashboard?student_id=alex'), api('/reels?limit=20')]);
     setApiStatus(Boolean(health && health.status === 'ok'));
     if (dashboard.profile) state.profile = dashboard.profile;
+    if (catalog.reels && catalog.reels.length) state.library = catalog.reels;
     const rec = await api('/recommend', { method: 'POST', body: JSON.stringify({ student_id: 'alex', profile: state.profile }) });
     if (rec.recommendation) {
       state.recommendation = { ...state.recommendation, ...rec.recommendation, formula: rec.recommendation.formula || state.recommendation.formula };
@@ -180,6 +210,8 @@ document.addEventListener('click', (event) => {
   if (feedbackButton) handleFeedback(feedbackButton);
   const trapButton = event.target.closest('[data-trap-mode]');
   if (trapButton) { state.trapMode = trapButton.dataset.trapMode; render(); }
+  const filterButton = event.target.closest('[data-reel-filter]');
+  if (filterButton) { state.reelFilter = filterButton.dataset.reelFilter; render(); }
 });
 
 window.addEventListener('hashchange', render);
